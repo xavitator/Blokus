@@ -1,0 +1,2 @@
+# Blokus
+Scolar project

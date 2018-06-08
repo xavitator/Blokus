@@ -26,7 +26,7 @@ public class Bdd {
 	
 	/** Initialise la connexion avec la BDD	 */
 	public void connectToBDD() throws SQLException {
-		String url = "jdbc:postgresql://81.66.135.31:5432/blokus";
+		String url = "jdbc:postgresql://127.0.0.1:5432/blokus";
 		String user = "blokus";
 		String mdp = "blokus1";
 		conn = DriverManager.getConnection(url, user, mdp);
@@ -186,7 +186,28 @@ public class Bdd {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-    }
+        }
+	/**
+	 * Sauvegarde d'un objet de matrix avec une description score dans la BDD
+	 * @param o objet qu'on stocke dans la BDD
+	 * @param score description de l'objet de Matrix
+	 */
+	public void saveOneMatrixToBDDInit (Object o, String score) {
+    	try {
+			connectToBDD();
+			byte [] save = Serialization.saveObject(o); // tableau de byte de l'objet
+			String saveBdd = Base64.getEncoder().encodeToString(save); // String qu'on va stocker dans la BDD
+			Statement state = conn.createStatement();
+			state.executeUpdate("INSERT INTO matrices(id,matrice, score) VALUES(0,'" + saveBdd + "','" + score + "')");
+			state.close();
+			closeConnection();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+        }
+
+    
 
 	/**
 	 * On vide la table de Matrix

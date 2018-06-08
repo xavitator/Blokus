@@ -262,6 +262,6 @@ public class Learning implements Strategy{
                 new Matrix(mat10),
                 new Matrix(mat11)};
 
-        bdd.saveMatrixtoBDD(matrices, "initialisation");
+        bdd.saveOneMatrixToBDDInit(matrices, "initialisation");
     }
 }

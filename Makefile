@@ -23,9 +23,11 @@ SOURCE = src/
 all: 
 	@echo ''Pour afficher les informations du jeu : make version''
 	@echo ''Pour créer la javadoc : make docs''
+	@echo ''Pour créer la base de données : make build''
 	@echo ''Pour lancer le jeu dans le terminal : make terminal''
 	@echo ''Pour lancer le jeu en graphique : make graphic''
 	@echo ''Pour supprimer les binaires et la documentation : make clear''
+	@echo ''Pour supprimer toutes les données fichiers et bdd : make clean''
 
 ###############
 # Compilation #
@@ -39,7 +41,14 @@ compile:
 			@$(JC) $(FLAG_1) $(SOURCE) -d $(BIN) $(SOURCE)**/*.java $(SOURCE)*.java 2> /dev/null
 			@echo -e "[\e[1;32mOK\e[0m] Compilation finie"
 
-
+# Création base de données :
+build: compile
+			@echo ''Création de la base de données''
+			@echo -e "[\e[1;34mEn cours\e[0m] Création base de données"
+			@script/install
+			@$(JVM) -cp $(BIN):$(JAR) model.players.Learning 
+			@rm -rf binary
+			@echo -e "[\e[1;32mOK\e[0m] Base de données créée"
 
 #################
 # Lancement jeu #
@@ -53,7 +62,7 @@ terminal: clear_binary compile
 
 graphic: clear_binary compile
 			@clear
-			@$(JVM) -cp $(BIN):$(JAR) Main 1
+			@$(JVM) -cp $(BIN):$(JAR) Main 1 1> /dev/null 2> /dev/null
 
 
 #################
@@ -92,6 +101,12 @@ else
 clear_doc:
 	@echo "Aucune doc à supprimer"
 endif
+
+clean: clear
+		@echo ''Suppression de la base de données''
+		@echo -e "[\e[1;34mEn cours\e[0m] Supression base de données"
+		@script/remove
+		@echo -e "[\e[1;32mOK\e[0m] Base de données supprimée"
 
 
 ###########
